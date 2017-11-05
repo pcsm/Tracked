@@ -1,22 +1,14 @@
 /// Tracked value wrapper for types to be modified by reference.
-pub struct TrackedRef<T: PartialEq> {
+pub struct TrackedRef<T> {
     fresh: bool,
     val: T
 }
 
-impl<T: PartialEq> TrackedRef<T> {
+impl<T> TrackedRef<T> {
     pub fn new(val: T) -> Self {
         TrackedRef {
             fresh: true,
             val
-        }
-    }
-
-    /// Set a new value, marked as fresh if not equal to the existing value.
-    pub fn set(&mut self, val: T) {
-        if self.val != val {
-            self.val = val;
-            self.fresh = true;
         }
     }
 
@@ -48,6 +40,22 @@ impl<T: PartialEq> TrackedRef<T> {
 
     pub fn is_fresh(&self) -> bool {
         self.fresh
+    }
+}
+
+pub trait TrackedRefSet<T: PartialEq> {
+    /// Set a new value, marked as fresh if not equal to the existing value.
+    ///
+    /// Set is only defined for `TrackedRef` if `T` implements `PartialEq`.
+    fn set(&mut self, val: T);
+}
+
+impl<T: PartialEq> TrackedRefSet<T> for TrackedRef<T> {
+    fn set(&mut self, val: T) {
+        if self.val != val {
+            self.val = val;
+            self.fresh = true;
+        }
     }
 }
 
