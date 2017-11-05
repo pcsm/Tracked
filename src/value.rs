@@ -45,6 +45,11 @@ impl<T: PartialEq + Copy> Tracked<T> {
         self.fresh
     }
 }
+impl<T: Default + Copy + PartialEq> Default for Tracked<T> {
+    fn default() -> Self {
+        Tracked::new(T::default())
+    }
+}
 
 #[cfg(test)]
 mod tests {

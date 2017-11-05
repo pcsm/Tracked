@@ -68,6 +68,12 @@ impl<T: Clone + PartialEq> Clone for TrackedRef<T> {
     }
 }
 
+impl<T: Default> Default for TrackedRef<T> {
+    fn default() -> Self {
+        TrackedRef::new(T::default())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
